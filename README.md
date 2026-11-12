@@ -1,12 +1,13 @@
 # Docker Desktop extension for Hyland OpenArch
 
+> [!IMPORTANT]
+> **Not an official Hyland product.** The Docker Desktop extension for Hyland OpenArch is not Hyland OpenArch. It is in the [AlfrescoLabs](https://github.com/AlfrescoLabs) organization on GitHub because Hyland does not officially support it. Hyland OpenArch itself is at [github.com/hyland/OpenArch](https://github.com/hyland/OpenArch).
+
 Start [Hyland OpenArch](https://github.com/Hyland/OpenArch) on your machine with one click, and see what it does.
 
 Hyland OpenArch is an open source data layer for AI. It stores documents, metadata, permissions and embeddings,
 and it answers queries with the documents that the caller may read. This extension shows that with two demo
 users: the same query gives each user different documents.
-
-Not an official Hyland product: this is an AlfrescoLabs project that Hyland does not officially support.
 
 ## What it does
 
