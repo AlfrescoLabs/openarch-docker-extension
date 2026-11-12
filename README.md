@@ -34,7 +34,7 @@ The Docker Extensions Marketplace does not take new extensions at the moment, so
 3. Run:
 
    ```
-   docker extension install alfrescolabs/openarch-docker-extension
+   docker extension install angelborroy/openarch-extension
    ```
 
 The setting in step 2 lets Docker Desktop install extensions that Docker did not review. Turn it on again after
@@ -45,7 +45,7 @@ Docker Desktop does not tell you about updates of extensions installed this way.
 when a new version exists. To update, run:
 
 ```
-docker extension update alfrescolabs/openarch-docker-extension
+docker extension update angelborroy/openarch-extension
 ```
 
 ## Use

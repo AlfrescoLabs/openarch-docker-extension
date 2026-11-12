@@ -1,4 +1,4 @@
-IMAGE       ?= alfrescolabs/openarch-docker-extension
+IMAGE       ?= angelborroy/openarch-extension
 TAG         ?= dev
 CLI_VERSION ?= 0.6.0
 CLI_SRC     ?= ../openarch-cli

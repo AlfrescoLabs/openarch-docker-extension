@@ -1,13 +1,15 @@
 name: release
 
 # A person pushes a v* tag after review. This builds the image for both
-# platforms with the checked CLI release, and pushes it to Docker Hub.
+# platforms with the checked CLI release, pushes it to Docker Hub, and makes a
+# draft GitHub release. The extension shows an update notice only after the
+# draft is published.
 on:
   push:
     tags: ["v*"]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   image:
@@ -27,4 +29,10 @@ jobs:
           version=${GITHUB_REF_NAME#v}
           make push TAG=$version
           docker buildx build --push --platform linux/amd64,linux/arm64 --sbom=true --provenance=true \
-            --build-arg EXTENSION_VERSION=$version -t alfrescolabs/openarch-docker-extension:latest .
+            --build-arg EXTENSION_VERSION=$version -t angelborroy/openarch-extension:latest .
+      - name: Draft the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --draft --generate-notes \
+            --title "Docker Desktop extension for Hyland OpenArch ${GITHUB_REF_NAME#v}"

@@ -2,7 +2,7 @@
 // extension checks its latest GitHub release itself, at most once a day.
 
 export const RELEASES_URL = 'https://api.github.com/repos/AlfrescoLabs/openarch-docker-extension/releases/latest';
-export const IMAGE = 'alfrescolabs/openarch-docker-extension';
+export const IMAGE = 'angelborroy/openarch-extension';
 const KEY = 'openarch-update-check';
 const DAY = 24 * 60 * 60 * 1000;
 
