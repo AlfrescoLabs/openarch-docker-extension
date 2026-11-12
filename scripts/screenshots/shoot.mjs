@@ -5,6 +5,7 @@
 // openarch-dd helper of the installed extension, so the screens show real
 // data. Passwords are masked, and the home folder is shown as /Users/demo.
 //
+// Run `node themes.mjs` first for the real Docker Desktop look.
 // Needs: the extension installed, the UI built (cd ui && npm run build), and
 // the workspace with the demo, stopped (the Setup shot checks port 8080).
 // The script starts the stack for the other shots.
@@ -13,6 +14,7 @@
 
 import { chromium } from 'playwright-chromium';
 import { execFile } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { homedir } from 'node:os';
@@ -25,6 +27,9 @@ const HOME = homedir();
 const HELPER = join(HOME, 'Library/Containers/com.docker.docker/Data/extensions/angelborroy_openarch-extension/host/openarch-dd');
 // 1200x800 at scale 2 gives the 2400x1600 pixels that Docker asks for.
 const VIEW = { width: 1200, height: 800 };
+// The real Docker Desktop themes, read by themes.mjs; without them, standIn uses close colors.
+const THEMES_FILE = join(import.meta.dirname, '.docker-themes.json');
+const THEMES = existsSync(THEMES_FILE) ? JSON.parse(readFileSync(THEMES_FILE, 'utf8')) : null;
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml' };
 
 function mask(s) {
@@ -63,7 +68,7 @@ const URL = `http://127.0.0.1:${server.address().port}/`;
 
 // The stand-in for ddClient. Like Docker Desktop, exec rejects on a non-zero exit code.
 // window.__noWorkspace makes 'status' answer as if no workspace existed, for the Setup shot.
-function standIn() {
+function standIn(realThemes) {
   const decode = (s) => {
     const b = s.replace(/-/g, '+').replace(/_/g, '/');
     const bin = atob(b + '='.repeat((4 - (b.length % 4)) % 4));
@@ -77,10 +82,9 @@ function standIn() {
     const r = await (await fetch('/exec', { method: 'POST', body: JSON.stringify(args) })).json();
     return r.code === 0 ? r : Promise.reject(r);
   };
-  // Docker Desktop also injects its MUI themes. These are close to them: Docker blue,
-  // and the light and dark backgrounds of Docker Desktop.
+  // Docker Desktop also injects its MUI themes: the real ones from themes.mjs, or close colors.
   const font = 'Roboto, "Helvetica Neue", Arial, sans-serif';
-  const themes = {
+  const themes = realThemes ?? {
     light: { palette: { mode: 'light', primary: { main: '#1d63ed' }, background: { default: '#ffffff', paper: '#ffffff' } }, typography: { fontFamily: font } },
     dark: { palette: { mode: 'dark', primary: { main: '#4d8af0' }, background: { default: '#1f2730', paper: '#27313c' } }, typography: { fontFamily: font } },
   };
@@ -95,7 +99,7 @@ function standIn() {
 
 async function shoot(scheme, noWorkspace, name, steps) {
   const ctx = await browser.newContext({ viewport: VIEW, deviceScaleFactor: 2, colorScheme: scheme });
-  await ctx.addInitScript(standIn);
+  await ctx.addInitScript(standIn, THEMES);
   await ctx.addInitScript((v) => (window.__noWorkspace = v), noWorkspace);
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('page error:', e.message));

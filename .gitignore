@@ -7,3 +7,4 @@ CLAUDE.md
 /ui/node_modules/
 /ui/dist/
 /scripts/screenshots/node_modules/
+/scripts/screenshots/.docker-themes.json
