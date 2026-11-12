@@ -36,7 +36,7 @@ The extension runs the CLI for OpenArch, which is bundled in it. You do not need
 The Docker Extensions Marketplace does not take new extensions at the moment, so you install this one yourself:
 
 1. In Docker Desktop, open Settings, then Extensions. Turn on "Enable Docker Extensions".
-2. On the same page, turn off "Allow only extensions distributed through the Docker Marketplace".
+2. On the same page, turn off "Only allow extensions distributed through the Docker Marketplace".
 3. Run:
 
    ```
