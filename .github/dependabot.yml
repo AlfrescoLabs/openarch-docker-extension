@@ -17,6 +17,9 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@mui/*"
         update-types: ["version-update:semver-major"]
+      # TypeScript 7 is the new Go compiler: move to it on purpose, after a test.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: gomod
     directory: /host
     schedule:
@@ -25,6 +28,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Stay on a Node.js LTS line; change the major version by hand.
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
