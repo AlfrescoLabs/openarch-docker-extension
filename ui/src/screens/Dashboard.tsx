@@ -47,7 +47,8 @@ export function Dashboard(props: {
   const [logs, setLogs] = useState<string | null>(null);
   const [versionOpen, setVersionOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
-  const [backup, setBackup] = useState<string | null>(null);
+  // goBack is set after a failed version change: the old version and the backup made before it.
+  const [goBack, setGoBack] = useState<{ version: string; folder: string | null } | null>(null);
   const s = status.settings;
   const admin = creds?.users.find((u) => u.admin);
 
@@ -73,7 +74,8 @@ export function Dashboard(props: {
   const changeVersion = async (version: string) => {
     setVersionOpen(false);
     setError(null);
-    setBackup(null);
+    setGoBack(null);
+    const from = s?.version ?? '';
     let folder: string | null = null;
     try {
       // There is no automatic rollback: keep a backup to go back to.
@@ -84,7 +86,29 @@ export function Dashboard(props: {
       desktop.toast(`OpenArch ${version} is running.`);
     } catch (e) {
       setError(e);
-      setBackup(folder);
+      if (from) {
+        setGoBack({ version: from, folder });
+      }
+    }
+    refresh();
+  };
+
+  // back returns to the old version, then restores the data of the backup.
+  // restore puts back only the data, not the version.
+  const back = async () => {
+    if (!goBack) {
+      return;
+    }
+    setError(null);
+    try {
+      await cli.change(`Go back to ${goBack.version}`, ['upgrade', '--version', goBack.version, '--skip-smoke-test']);
+      if (goBack.folder) {
+        await cli.change('Restore the backup', ['restore', goBack.folder, '--yes']);
+      }
+      setGoBack(null);
+      desktop.toast(`OpenArch ${goBack.version} is running again.`);
+    } catch (e) {
+      setError(e);
     }
     refresh();
   };
@@ -114,16 +138,17 @@ export function Dashboard(props: {
         </Alert>
       )}
       <ErrorAlert error={error} />
-      {backup && (
+      {goBack && (
         <Alert
           severity="warning"
           action={
-            <Button color="inherit" disabled={!!busy} onClick={() => void act('Restore the backup', ['restore', backup, '--yes'])}>
-              Restore backup
+            <Button color="inherit" disabled={!!busy} onClick={() => void back()}>
+              Go back to {goBack.version}
             </Button>
           }
         >
-          The version change failed. A backup made before it is in {backup}.
+          The version change failed.{' '}
+          {goBack.folder ? `A backup made before it is in ${goBack.folder}.` : 'There is no backup: OpenArch was not running.'}
         </Alert>
       )}
 
