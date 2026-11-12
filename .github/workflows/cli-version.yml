@@ -1,0 +1,28 @@
+name: cli-version
+
+# Dependabot does not know CLI_VERSION in the Makefile. This job fails when a
+# newer CLI for OpenArch release exists, so that the maintainer gets a mail.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compare CLI_VERSION with the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pinned=$(sed -n 's/^CLI_VERSION *?= *//p' Makefile)
+          latest=$(gh release view -R AlfrescoLabs/openarch-cli --json tagName --jq .tagName)
+          echo "CLI_VERSION is $pinned, the latest release is $latest"
+          if [ "v$pinned" != "$latest" ]; then
+            echo "::error::A newer CLI for OpenArch exists: set CLI_VERSION ?= ${latest#v} in the Makefile"
+            exit 1
+          fi

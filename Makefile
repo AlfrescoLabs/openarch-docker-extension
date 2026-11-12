@@ -1,7 +1,7 @@
 IMAGE       ?= alfrescolabs/openarch-docker-extension
 TAG         ?= dev
 CLI_VERSION ?= 0.6.0
-CLI_SRC     ?= ../zz-openarch-cli
+CLI_SRC     ?= ../openarch-cli
 PLATFORMS   ?= linux/amd64,linux/arm64
 
 .PHONY: cli-local cli-release test build install update debug validate push
