@@ -56,7 +56,7 @@ docker extension update angelborroy/openarch-extension
 
 ## Use
 
-1. Open the OpenArch tab in Docker Desktop.
+1. Open the OpenArch Community tab in Docker Desktop.
 2. Choose "OpenArch only (REST API)" or "OpenArch + demo", and the version. "Advanced options" has the port,
    the memory, OpenSearch Dashboards, open MongoDB and OpenSearch ports, and the users bundled in the OpenArch
    image.

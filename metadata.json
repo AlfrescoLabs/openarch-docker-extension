@@ -2,7 +2,7 @@
   "icon": "openarch.svg",
   "ui": {
     "dashboard-tab": {
-      "title": "OpenArch",
+      "title": "OpenArch Community",
       "root": "/ui",
       "src": "index.html"
     }
