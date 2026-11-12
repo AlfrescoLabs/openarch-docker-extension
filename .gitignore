@@ -1,0 +1,8 @@
+# Agent notes and review reports
+CLAUDE.md
+*_report.md
+
+# Build output
+/build/
+/ui/node_modules/
+/ui/dist/

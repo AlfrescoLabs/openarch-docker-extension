@@ -1,0 +1,24 @@
+{
+  "icon": "openarch.svg",
+  "ui": {
+    "dashboard-tab": {
+      "title": "OpenArch",
+      "root": "/ui",
+      "src": "index.html"
+    }
+  },
+  "host": {
+    "binaries": [
+      {
+        "darwin": [{ "path": "/darwin/openarch-dd" }],
+        "linux": [{ "path": "/linux/openarch-dd" }],
+        "windows": [{ "path": "/windows/openarch-dd.exe" }]
+      },
+      {
+        "darwin": [{ "path": "/darwin/openarch" }],
+        "linux": [{ "path": "/linux/openarch" }],
+        "windows": [{ "path": "/windows/openarch.exe" }]
+      }
+    ]
+  }
+}
