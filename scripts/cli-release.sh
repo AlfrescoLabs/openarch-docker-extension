@@ -2,7 +2,8 @@
 # Downloads the openarch CLI release <version> for every OS and CPU that the
 # extension ships, checks checksums.txt with cosign and the archives with
 # sha256, and extracts the binaries into build/cli/<arch>/<os>/.
-# Needs curl, cosign, tar, unzip and sha256sum (or shasum).
+# Needs curl, tar, unzip, sha256sum (or shasum), and cosign or Docker: without
+# cosign on the PATH, the official cosign image runs it.
 set -eu
 version=${1:?usage: cli-release.sh <version, for example 0.6.0>}
 version=${version#v}
@@ -11,6 +12,9 @@ out=$(pwd)/build/cli
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 cd "$tmp"
+if ! command -v cosign >/dev/null; then
+  cosign() { docker run --rm -v "$tmp":/w -w /w ghcr.io/sigstore/cosign/cosign:v3.1.4 "$@"; }
+fi
 curl -fsSLO "$base/checksums.txt"
 curl -fsSLO "$base/checksums.txt.sigstore.json"
 cosign verify-blob checksums.txt \
