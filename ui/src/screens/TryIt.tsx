@@ -158,7 +158,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
               <CardContent>
                 <Typography variant="h6">{c.username}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {c.docs ? `${c.docs.length} documents` : c.error ? '' : 'running...'}
+                  {c.docs ? `${c.docs.length} document${c.docs.length === 1 ? '' : 's'}` : c.error ? '' : 'running...'}
                 </Typography>
                 <ErrorAlert error={c.error} />
                 <List dense>
