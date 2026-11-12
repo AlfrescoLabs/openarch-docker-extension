@@ -24,7 +24,7 @@ RUN for os in darwin linux windows; do \
 FROM scratch
 ARG TARGETARCH
 ARG EXTENSION_VERSION=0.0.0-dev
-LABEL org.opencontainers.image.title="Hyland OpenArch" \
+LABEL org.opencontainers.image.title="Docker Extension for OpenArch" \
       org.opencontainers.image.description="Start Hyland OpenArch, an open source data layer for AI, and see permission-aware search with sample data. Not an official Hyland product." \
       org.opencontainers.image.vendor="AlfrescoLabs" \
       org.opencontainers.image.licenses="Apache-2.0" \

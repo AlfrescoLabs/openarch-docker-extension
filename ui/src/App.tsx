@@ -74,9 +74,9 @@ export function App() {
   return (
     <Stack spacing={2} sx={{ p: 3 }}>
       <Box>
-        <Typography variant="h3">Hyland OpenArch</Typography>
+        <Typography variant="h3">Docker Extension for OpenArch</Typography>
         <Typography variant="body2" color="text.secondary">
-          An open source data layer for AI, with permission-aware search. This extension uses the{' '}
+          Runs Hyland OpenArch, an open source data layer for AI with permission-aware search, with the{' '}
           <Link component="button" variant="body2" onClick={() => dd.host.openExternal('https://github.com/AlfrescoLabs/openarch-cli')}>
             CLI for OpenArch
           </Link>

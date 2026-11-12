@@ -1,7 +1,7 @@
-# Docker Desktop extension for Hyland OpenArch
+# Docker Extension for OpenArch
 
 > [!IMPORTANT]
-> **Not an official Hyland product.** The Docker Desktop extension for Hyland OpenArch is not Hyland OpenArch. It is in the [AlfrescoLabs](https://github.com/AlfrescoLabs) organization on GitHub because Hyland does not officially support it. Hyland OpenArch itself is at [github.com/hyland/OpenArch](https://github.com/hyland/OpenArch).
+> **Not an official Hyland product.** The Docker Extension for OpenArch is not Hyland OpenArch. It is in the [AlfrescoLabs](https://github.com/AlfrescoLabs) organization on GitHub because Hyland does not officially support it. Hyland OpenArch itself is at [github.com/hyland/OpenArch](https://github.com/hyland/OpenArch).
 
 Start [Hyland OpenArch](https://github.com/Hyland/OpenArch) on your machine with one click, and see what it does.
 
