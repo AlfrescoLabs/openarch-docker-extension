@@ -1,0 +1,11 @@
+{
+  "name": "openarch-extension-screenshots",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "shoot": "node shoot.mjs"
+  },
+  "devDependencies": {
+    "playwright-chromium": "1.63.0"
+  }
+}

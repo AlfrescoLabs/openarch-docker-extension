@@ -9,6 +9,11 @@ Hyland OpenArch is an open source data layer for AI. It stores documents, metada
 and it answers queries with the documents that the caller may read. This extension shows that with two demo
 users: the same query gives each user different documents.
 
+<p align="center">
+  <img alt="Try it: the same query as the admin, alice and bob gives 6, 4 and 3 documents" src="docs/screenshots/try-it-light.png#gh-light-mode-only" width="800">
+  <img alt="Try it: the same query as the admin, alice and bob gives 6, 4 and 3 documents" src="docs/screenshots/try-it-dark.png#gh-dark-mode-only" width="800">
+</p>
+
 ## What it does
 
 - Starts the OpenArch REST API, with MongoDB and OpenSearch, and shows the health of each service.
@@ -69,6 +74,19 @@ The admin sees 6 documents, alice 4 and bob 3.
 
 The options apply when OpenArch starts the first time. To change them, use "Remove everything" and start again.
 Only the version can change later: "Change version" makes a backup first, so that you can go back.
+
+## Screenshots
+
+<img alt="Setup: the checks, the demo mode and the version" src="docs/screenshots/setup-light.png#gh-light-mode-only" width="800">
+<img alt="Setup: the checks, the demo mode and the version" src="docs/screenshots/setup-dark.png#gh-dark-mode-only" width="800">
+
+<img alt="Dashboard: the health of each service, the links and the login" src="docs/screenshots/dashboard-light.png#gh-light-mode-only" width="800">
+<img alt="Dashboard: the health of each service, the links and the login" src="docs/screenshots/dashboard-dark.png#gh-dark-mode-only" width="800">
+
+<img alt="Connect AI: the MCP setup for AI clients" src="docs/screenshots/connect-ai-light.png#gh-light-mode-only" width="800">
+<img alt="Connect AI: the MCP setup for AI clients" src="docs/screenshots/connect-ai-dark.png#gh-dark-mode-only" width="800">
+
+The screenshots are made with `scripts/screenshots` (Playwright, real data, passwords masked).
 
 ## Files
 

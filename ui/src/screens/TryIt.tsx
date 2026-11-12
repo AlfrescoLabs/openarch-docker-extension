@@ -167,7 +167,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
                       <ListItemText
                         primary={d.sys_title || d.sys_name}
                         secondary={
-                          <Link component="button" variant="body2" onClick={() => void whoCanRead(d)}>
+                          <Link component="button" variant="body2" sx={{ textAlign: 'left' }} onClick={() => void whoCanRead(d)}>
                             {d.sys_path} - who can read this?
                           </Link>
                         }
