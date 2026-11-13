@@ -131,7 +131,11 @@ const up = await helper('up');
 if (up.code !== 0) {
   throw new Error('openarch up failed: ' + up.stdout + up.stderr);
 }
-await helper('demo', 'load');
+// With vectors, so the question shot has results. This needs Docker Model Runner
+// with host TCP access and ai/mxbai-embed-large. Vectors reach the index a few
+// seconds after the load.
+await helper('demo', 'load', '--force', '--embeddings');
+await new Promise((r) => setTimeout(r, 8000));
 
 for (const s of schemes) {
   await shoot(s, false, 'dashboard', async (p) => {
@@ -142,6 +146,12 @@ for (const s of schemes) {
     // Every column has run: the admin sees 10 documents and carol 2.
     await p.getByText('10 documents').waitFor({ timeout: 60000 });
     await p.getByText('2 documents').waitFor({ timeout: 60000 });
+  });
+  await shoot(s, false, 'try-it-question', async (p) => {
+    await p.getByRole('tab', { name: 'Try it' }).click();
+    await p.getByText('10 documents').waitFor({ timeout: 60000 });
+    await p.getByRole('button', { name: 'Ask' }).click();
+    await p.getByText('2 nearest documents').waitFor({ timeout: 60000 });
   });
   await shoot(s, false, 'connect-ai', async (p) => {
     await p.getByRole('tab', { name: 'Connect AI' }).click();
