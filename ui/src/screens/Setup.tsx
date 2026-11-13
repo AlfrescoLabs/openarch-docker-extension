@@ -22,7 +22,7 @@ import { Cli, CliError } from '../cli';
 import type { Doctor } from '../types';
 import { ErrorAlert } from './common';
 
-// CONTEXT is the name of the workspace context. Demo contexts get "-alice" and "-bob".
+// CONTEXT is the name of the workspace context. Demo contexts get "-alice", "-bob" and "-carol".
 export const CONTEXT = 'oa-desktop';
 
 type Version = 'recommended' | 'latest' | 'custom';

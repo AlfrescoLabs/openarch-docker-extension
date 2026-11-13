@@ -6,20 +6,20 @@
 Start [Hyland OpenArch](https://github.com/Hyland/OpenArch) on your machine with one click, and see what it does.
 
 Hyland OpenArch is an open source data layer for AI. It stores documents, metadata, permissions and embeddings,
-and it answers queries with the documents that the caller may read. This extension shows that with two demo
+and it answers queries with the documents that the caller may read. This extension shows that with three demo
 users: the same query gives each user different documents.
 
 <p align="center">
-  <img alt="Try it: the same query as the admin, alice and bob gives 6, 4 and 3 documents" src="docs/screenshots/try-it-light.png#gh-light-mode-only" width="800">
-  <img alt="Try it: the same query as the admin, alice and bob gives 6, 4 and 3 documents" src="docs/screenshots/try-it-dark.png#gh-dark-mode-only" width="800">
+  <img alt="Try it: the same query as the admin, alice, bob and carol gives 10, 6, 6 and 2 documents" src="docs/screenshots/try-it-light.png#gh-light-mode-only" width="800">
+  <img alt="Try it: the same query as the admin, alice, bob and carol gives 10, 6, 6 and 2 documents" src="docs/screenshots/try-it-dark.png#gh-dark-mode-only" width="800">
 </p>
 
 ## What it does
 
 - Starts the OpenArch REST API, with MongoDB and OpenSearch, and shows the health of each service.
 - Lets you choose the OpenArch version: the recommended one, the latest one, or any tag.
-- Optional demo: two users (alice and bob), and sample documents with different read access. The "Try it" tab
-  runs one query as the admin, alice and bob, side by side.
+- Optional demo: three users (alice, bob and carol), and sample documents with different read access. The
+  "Try it" tab runs one query as the admin and each demo user, side by side.
 - Opens the Swagger UI, and shows the admin login.
 - Shows how to connect AI clients, such as Claude Code, through the MCP server of the
   [CLI for OpenArch](https://github.com/AlfrescoLabs/openarch-cli).
@@ -63,14 +63,19 @@ docker extension update angelborroy/openarch-extension
 3. Click Start. The page shows the state until OpenArch is healthy.
 4. With the demo, open "Try it" and click "Load sample data".
 
+All three users are in the group `members`. carol is in no other group.
+
 | Folder | Who can read it | Documents |
 | --- | --- | --- |
-| `/Demo/Public` | every user | Holiday calendar 2026, Office Wi-Fi guide |
+| `/Demo/Public` | every user (group `members`) | Holiday calendar 2026, Office Wi-Fi guide |
+| `/Demo/Public/Facilities` | bob only: it blocks what it inherits | Office move plan |
 | `/Demo/HR` | group `demo-hr` (alice) | Salary bands 2026, Hiring plan Q1 2027 |
-| `/Demo/Finance` | group `demo-finance` (bob) | Budget forecast 2027 |
+| `/Demo/HR/Reviews` | inherits from `/Demo/HR` | Review calendar 2027 |
+| `/Demo/Finance` | group `demo-finance` (bob) | Budget forecast 2027, Travel policy 2027 (also alice), Contractor rates 2027 (alice's access ended on 2026-01-01) |
 | `/Demo/Board` | administrators only | Merger proposal |
 
-The admin sees 6 documents, alice 4 and bob 3.
+The admin sees 10 documents, alice 6, bob 6 and carol 2. "Who can read this?" shows the users and groups
+that may read a document, without access that has ended.
 
 The options apply when OpenArch starts the first time. To change them, use "Remove everything" and start again.
 Only the version can change later: "Change version" makes a backup first, so that you can go back.

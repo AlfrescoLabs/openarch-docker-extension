@@ -139,7 +139,9 @@ for (const s of schemes) {
   });
   await shoot(s, false, 'try-it', async (p) => {
     await p.getByRole('tab', { name: 'Try it' }).click();
-    await p.getByText('3 documents').waitFor({ timeout: 60000 });
+    // Every column has run: the admin sees 10 documents and carol 2.
+    await p.getByText('10 documents').waitFor({ timeout: 60000 });
+    await p.getByText('2 documents').waitFor({ timeout: 60000 });
   });
   await shoot(s, false, 'connect-ai', async (p) => {
     await p.getByRole('tab', { name: 'Connect AI' }).click();

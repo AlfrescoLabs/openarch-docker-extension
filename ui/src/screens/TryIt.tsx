@@ -19,6 +19,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { readers } from '../acl';
 import { Cli } from '../cli';
 import type { Credentials, Document, QueryResult } from '../types';
 import { ErrorAlert } from './common';
@@ -100,10 +101,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
     }
     try {
       const d = await cli.json<Document>(['documents', 'get', doc.sys_path, '--context', adminContext]);
-      const groups = (d.sys_effectiveAcl ?? [])
-        .filter((a) => a.granted && a.permission === 'Read')
-        .map((a) => a.group?.name ?? a.user?.username ?? '')
-        .filter(Boolean);
+      const groups = readers(d.sys_effectiveAcl);
       // Administrators can read every document: the root has no access entries.
       setAcl({ doc, groups: ['administrators', ...groups] });
     } catch (e) {
@@ -115,7 +113,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
     <Stack spacing={3}>
       <Typography>
         OpenArch answers each query with the documents that the caller may read. Here the same query runs as the admin and as
-        two demo users. alice is in the group demo-hr, and bob is in demo-finance.
+        the demo users. alice is in the group demo-hr, bob is in demo-finance, and carol is in no extra group.
       </Typography>
       <Stack direction="row" spacing={1}>
         <Button variant="contained" disabled={!!busy} onClick={() => void load(['demo', 'load'], 'Load the sample documents')}>
@@ -153,7 +151,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
 
       <Grid container spacing={2}>
         {cols.map((c) => (
-          <Grid item key={c.context} xs={12} md={4}>
+          <Grid item key={c.context} xs={12} md={Math.max(3, Math.floor(12 / cols.length))}>
             <Card variant="outlined">
               <CardContent>
                 <Typography variant="h6">{c.username}</Typography>

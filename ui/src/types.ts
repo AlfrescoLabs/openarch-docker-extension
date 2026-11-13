@@ -58,6 +58,8 @@ export interface Credentials {
 export interface Ace {
   permission: string;
   granted: boolean;
+  // status is EFFECTIVE, PENDING (begin date not reached) or ARCHIVED (end date passed).
+  status?: string;
   group?: { id: string; name?: string };
   user?: { username?: string };
 }
