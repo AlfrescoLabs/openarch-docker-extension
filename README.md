@@ -19,7 +19,8 @@ users: the same query gives each user different documents.
 - Starts the OpenArch REST API, with MongoDB and OpenSearch, and shows the health of each service.
 - Lets you choose the OpenArch version: the recommended one, the latest one, or any tag.
 - Optional demo: three users (alice, bob and carol), and sample documents with different read access. The
-  "Try it" tab runs one query as the admin and each demo user, side by side.
+  "Try it" tab runs one query as the admin and each demo user, side by side. A question finds the documents
+  nearest in meaning, with vectors made by a local model on Docker Model Runner, and follows the same rules.
 - Opens the Swagger UI, and shows the admin login.
 - Shows how to connect AI clients, such as Claude Code, through the MCP server of the
   [CLI for OpenArch](https://github.com/AlfrescoLabs/openarch-cli).
@@ -77,6 +78,18 @@ All three users are in the group `members`. carol is in no other group.
 The admin sees 10 documents, alice 6, bob 6 and carol 2. "Who can read this?" shows the users and groups
 that may read a document, without access that has ended.
 
+"Load sample data" also stores a vector for each document when Docker Model Runner can make it. Then "Ask"
+finds the documents nearest in meaning to a question, for each user: for "How much is the pay for each job
+level?", alice gets the salary bands first, and bob never gets them. Questions need Docker Model Runner with
+host TCP access and the embedding model:
+
+```
+docker desktop enable model-runner --tcp 12434
+docker model pull ai/mxbai-embed-large
+```
+
+Without them, "Load sample data" loads the documents without vectors and says why.
+
 The options apply when OpenArch starts the first time. To change them, use "Remove everything" and start again.
 Only the version can change later: "Change version" makes a backup first, so that you can go back.
 
@@ -87,6 +100,9 @@ Only the version can change later: "Change version" makes a backup first, so tha
 
 <img alt="Dashboard: the health of each service, the links and the login" src="docs/screenshots/dashboard-light.png#gh-light-mode-only" width="800">
 <img alt="Dashboard: the health of each service, the links and the login" src="docs/screenshots/dashboard-dark.png#gh-dark-mode-only" width="800">
+
+<img alt="Try it: a question finds the nearest documents that each user may read" src="docs/screenshots/try-it-question-light.png#gh-light-mode-only" width="800">
+<img alt="Try it: a question finds the nearest documents that each user may read" src="docs/screenshots/try-it-question-dark.png#gh-dark-mode-only" width="800">
 
 <img alt="Connect AI: the MCP setup for AI clients" src="docs/screenshots/connect-ai-light.png#gh-light-mode-only" width="800">
 <img alt="Connect AI: the MCP setup for AI clients" src="docs/screenshots/connect-ai-dark.png#gh-dark-mode-only" width="800">

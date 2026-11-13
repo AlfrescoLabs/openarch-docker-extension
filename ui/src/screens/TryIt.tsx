@@ -20,8 +20,9 @@ import {
   Typography,
 } from '@mui/material';
 import { readers } from '../acl';
-import { Cli } from '../cli';
-import type { Credentials, Document, QueryResult } from '../types';
+import { Cli, CliError, Exit } from '../cli';
+import { hitDocument, QUESTIONS } from '../semantic';
+import type { Credentials, Document, QueryResult, SemanticHit, SemanticResult } from '../types';
 import { ErrorAlert } from './common';
 
 export const PRESETS = [
@@ -32,7 +33,10 @@ export const PRESETS = [
 interface Column {
   username: string;
   context: string;
+  // docs is the result of a query, hits the result of a question. One of them is set.
   docs: Document[] | null;
+  hits: SemanticHit[] | null;
+  total: number;
   error: unknown;
 }
 
@@ -42,11 +46,12 @@ function columns(creds: Credentials): Column[] {
   const others = creds.users.filter((u) => !u.admin);
   return [...admin, ...others]
     .filter((u) => u.context)
-    .map((u) => ({ username: u.username, context: u.context as string, docs: null, error: null }));
+    .map((u) => ({ username: u.username, context: u.context as string, docs: null, hits: null, total: 0, error: null }));
 }
 
 export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy: string | null }) {
   const [query, setQuery] = useState(PRESETS[0].query);
+  const [question, setQuestion] = useState(QUESTIONS[0]);
   const [cols, setCols] = useState<Column[]>(() => columns(creds));
   const [error, setError] = useState<unknown>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -62,7 +67,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
         base.map(async (c) => {
           try {
             const r = await cli.json<QueryResult>(['query', q, '--context', c.context, '--sync', '--limit', '50']);
-            return { ...c, docs: r.documents };
+            return { ...c, docs: r.documents, total: r.documents.length };
           } catch (e) {
             return { ...c, error: e };
           }
@@ -75,6 +80,49 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
   useEffect(() => {
     void run(PRESETS[0].query);
   }, [run]);
+
+  const ask = async (q: string) => {
+    setError(null);
+    const base = columns(creds);
+    setCols(base);
+    const results = await Promise.all(
+      base.map(async (c) => {
+        try {
+          const r = await cli.json<SemanticResult>(['query', '--semantic', q, '--context', c.context, '--limit', '5']);
+          // totalCount of a vector search counts at most the hits asked for, so it is not shown.
+          return { ...c, hits: r.hits };
+        } catch (e) {
+          return { ...c, error: e };
+        }
+      }),
+    );
+    setCols(results);
+  };
+
+  // loadSample stores vectors with the documents when Docker Model Runner can make
+  // them, and loads the documents alone when it cannot.
+  const loadSample = async () => {
+    setError(null);
+    setInfo(null);
+    try {
+      const r = await cli.change<{ action: string }>('Load the sample documents', ['demo', 'load', '--embeddings']);
+      setInfo(
+        r.action === 'exists'
+          ? 'The sample documents are already there. To add vectors to them, reset the sample data and load it again.'
+          : 'Loaded the sample documents, with a vector for each one.',
+      );
+    } catch (e) {
+      if (!(e instanceof CliError) || e.code !== Exit.Prerequisite) {
+        setError(e);
+        void run(query);
+        return;
+      }
+      await load(['demo', 'load'], 'Load the sample documents');
+      setInfo(`Loaded the sample documents without vectors, so questions find nothing: ${e.message}. ${e.hint}`);
+      return;
+    }
+    void run(query);
+  };
 
   const load = async (args: string[], label: string) => {
     setError(null);
@@ -100,7 +148,8 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
       return;
     }
     try {
-      const d = await cli.json<Document>(['documents', 'get', doc.sys_path, '--context', adminContext]);
+      // A hit of a question has the id of its document, but not the path.
+      const d = await cli.json<Document>(['documents', 'get', doc.sys_path || doc.sys_id, '--context', adminContext]);
       const groups = readers(d.sys_effectiveAcl);
       // Administrators can read every document: the root has no access entries.
       setAcl({ doc, groups: ['administrators', ...groups] });
@@ -113,10 +162,12 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
     <Stack spacing={3}>
       <Typography>
         OpenArch answers each query with the documents that the caller may read. Here the same query runs as the admin and as
-        the demo users. alice is in the group demo-hr, bob is in demo-finance, and carol is in no extra group.
+        the demo users. alice is in the group demo-hr, bob is in demo-finance, and carol is in no extra group. A question
+        finds the documents nearest in meaning, with vectors made by a local model on Docker Model Runner, and follows the
+        same access rules.
       </Typography>
       <Stack direction="row" spacing={1}>
-        <Button variant="contained" disabled={!!busy} onClick={() => void load(['demo', 'load'], 'Load the sample documents')}>
+        <Button variant="contained" disabled={!!busy} onClick={() => void loadSample()}>
           Load sample data
         </Button>
         <Button disabled={!!busy} onClick={() => void load(['demo', 'reset', '--yes'], 'Delete the sample documents')}>
@@ -149,6 +200,29 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
         </Button>
       </Stack>
 
+      <Stack direction="row" spacing={1} alignItems="center">
+        <TextField
+          select
+          label="Example question"
+          value={QUESTIONS.includes(question) ? question : ''}
+          onChange={(e) => {
+            setQuestion(e.target.value);
+            void ask(e.target.value);
+          }}
+          sx={{ minWidth: 220 }}
+        >
+          {QUESTIONS.map((q) => (
+            <MenuItem key={q} value={q}>
+              {q}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField label="Question" value={question} onChange={(e) => setQuestion(e.target.value)} fullWidth />
+        <Button variant="outlined" onClick={() => void ask(question)}>
+          Ask
+        </Button>
+      </Stack>
+
       <Grid container spacing={2}>
         {cols.map((c) => (
           <Grid item key={c.context} xs={12} md={Math.max(3, Math.floor(12 / cols.length))}>
@@ -156,7 +230,13 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
               <CardContent>
                 <Typography variant="h6">{c.username}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {c.docs ? `${c.docs.length} document${c.docs.length === 1 ? '' : 's'}` : c.error ? '' : 'running...'}
+                  {c.hits
+                    ? `${c.hits.length} nearest document${c.hits.length === 1 ? '' : 's'}`
+                    : c.docs
+                      ? `${c.total} document${c.total === 1 ? '' : 's'}`
+                      : c.error
+                        ? ''
+                        : 'running...'}
                 </Typography>
                 <ErrorAlert error={c.error} />
                 <List dense>
@@ -167,6 +247,18 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
                         secondary={
                           <Link component="button" variant="body2" sx={{ textAlign: 'left' }} onClick={() => void whoCanRead(d)}>
                             {d.sys_path} - who can read this?
+                          </Link>
+                        }
+                      />
+                    </ListItem>
+                  ))}
+                  {c.hits?.map((h) => (
+                    <ListItem key={h.docId} disableGutters>
+                      <ListItemText
+                        primary={hitDocument(h).sys_title}
+                        secondary={
+                          <Link component="button" variant="body2" sx={{ textAlign: 'left' }} onClick={() => void whoCanRead(hitDocument(h))}>
+                            score {h.score.toFixed(2)} - who can read this?
                           </Link>
                         }
                       />

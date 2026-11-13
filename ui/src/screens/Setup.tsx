@@ -161,7 +161,7 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
             value="demo"
             control={<Radio />}
             disabled={o.defaultUsers}
-            label="OpenArch + demo: two users and sample documents that show permission-aware search"
+            label="OpenArch + demo: three users and sample documents that show permission-aware search"
           />
         </RadioGroup>
       </Box>

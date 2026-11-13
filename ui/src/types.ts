@@ -81,3 +81,17 @@ export interface QueryResult {
 export interface Backup {
   path: string;
 }
+
+// SemanticHit and SemanticResult are the output of 'openarch query --semantic'.
+export interface SemanticHit {
+  docId: string;
+  score: number;
+  text?: string;
+}
+
+export interface SemanticResult {
+  text: string;
+  embeddingType: string;
+  hits: SemanticHit[];
+  totalCount: number;
+}
