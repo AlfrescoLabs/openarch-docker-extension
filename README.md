@@ -151,6 +151,12 @@ make debug             # open the DevTools of the extension UI
   The helper decodes them, sets the workspace and config folders, and runs the bundled `openarch`.
 - `ui/` is the React UI. `ui/src/cli.ts` is the only code that runs commands.
 
+## Community
+
+Questions, ideas and "show what you built" go to the
+[Hyland OpenArch group](https://community.hyland.com/group/26-hyland-openarch) on Hyland Community.
+Bugs and feature requests for this project go to its GitHub issues.
+
 ## License
 
 [Apache License 2.0](LICENSE)
