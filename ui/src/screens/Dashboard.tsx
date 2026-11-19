@@ -264,7 +264,7 @@ function VersionDialog(props: { open: boolean; current: string; onClose: () => v
   const version = choice === 'latest' ? 'latest' : tag.trim();
   return (
     <Dialog open={props.open} onClose={props.onClose}>
-      <DialogTitle>Change the OpenArch version</DialogTitle>
+      <DialogTitle>Change the Hyland OpenArch version</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
           <Typography variant="body2">

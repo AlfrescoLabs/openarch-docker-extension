@@ -17,7 +17,7 @@ users: the same query gives each user different documents.
 ## What it does
 
 - Starts the OpenArch REST API, with MongoDB and OpenSearch, and shows the health of each service.
-- Lets you choose the OpenArch version: the recommended one, the latest one, or any tag.
+- Lets you choose the Hyland OpenArch version: the recommended one, the latest one, or any tag.
 - Optional demo: three users (alice, bob and carol), and sample documents with different read access. The
   "Try it" tab runs one query as the admin and each demo user, side by side. A question finds the documents
   nearest in meaning, with vectors made by a local model on Docker Model Runner, and follows the same rules.

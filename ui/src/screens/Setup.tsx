@@ -169,7 +169,7 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
       <Stack direction="row" spacing={2} alignItems="center">
         <TextField
           select
-          label="OpenArch version"
+          label="Hyland OpenArch version"
           value={o.version}
           onChange={(e) => set({ version: e.target.value as Version })}
           sx={{ minWidth: 280 }}

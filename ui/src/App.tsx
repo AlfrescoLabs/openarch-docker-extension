@@ -14,6 +14,8 @@ declare const __EXTENSION_VERSION__: string;
 
 const dd = createDockerDesktopClient();
 const POLL_MS = 5000;
+// The Hyland OpenArch group on Hyland Community, where users ask usage questions.
+const COMMUNITY_URL = 'https://community.hyland.com/group/26-hyland-openarch';
 
 // noWorkspace reports the 'status' error of a workspace that does not exist yet.
 function noWorkspace(e: unknown): boolean {
@@ -81,6 +83,11 @@ export function App() {
             CLI for OpenArch
           </Link>
           . Not an official Hyland product: an AlfrescoLabs project that Hyland does not officially support.
+          Questions? Ask in the{' '}
+          <Link component="button" variant="body2" onClick={() => dd.host.openExternal(COMMUNITY_URL)}>
+            Hyland OpenArch group
+          </Link>
+          .
         </Typography>
       </Box>
       {update && (
