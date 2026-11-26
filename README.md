@@ -58,7 +58,7 @@ docker extension update angelborroy/openarch-extension
 ## Use
 
 1. Open the OpenArch Community tab in Docker Desktop.
-2. Choose "OpenArch only (REST API)" or "OpenArch + demo", and the version. "Advanced options" has the port,
+2. Choose "Hyland OpenArch only (REST API)" or "Hyland OpenArch + demo", and the version. "Advanced options" has the port,
    the memory, OpenSearch Dashboards, open MongoDB and OpenSearch ports, and the users bundled in the OpenArch
    image.
 3. Click Start. The page shows the state until OpenArch is healthy.
