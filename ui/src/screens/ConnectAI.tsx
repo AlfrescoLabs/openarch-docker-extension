@@ -14,7 +14,7 @@ export function ConnectAI({ workspace }: { workspace: string }) {
   return (
     <Stack spacing={2} sx={{ maxWidth: 900 }}>
       <Typography>
-        The CLI for OpenArch has an MCP server: AI agents can query and manage this OpenArch as tools. Install the CLI first, so
+        The CLI for OpenArch has an MCP server: AI agents can query and manage this Hyland OpenArch as tools. Install the CLI first, so
         that the AI client finds it on the PATH:
       </Typography>
       <Code>{'brew install AlfrescoLabs/tap/openarch      # macOS and Linux\nscoop bucket add alfrescolabs https://github.com/AlfrescoLabs/scoop-bucket\nscoop install openarch                      # Windows'}</Code>

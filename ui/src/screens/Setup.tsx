@@ -111,8 +111,8 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
         setStep('Adding the demo users');
         await cli.change('Add the demo users', ['demo', 'users']);
       }
-      setStep('Starting OpenArch (the first start pulls about 2 GB)');
-      await cli.change('Start OpenArch', ['up', '--wait=false']);
+      setStep('Starting Hyland OpenArch (the first start pulls about 2 GB)');
+      await cli.change('Start Hyland OpenArch', ['up', '--wait=false']);
       onStarted();
     } catch (e) {
       setError(e);
@@ -129,7 +129,7 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
   return (
     <Stack spacing={3} sx={{ maxWidth: 820 }}>
       <Typography>
-        Start Hyland OpenArch on this machine: the OpenArch REST API, with MongoDB and OpenSearch. It needs about 4 GB of
+        Start Hyland OpenArch on this machine: its REST API, with MongoDB and OpenSearch. It needs about 4 GB of
         Docker memory.
       </Typography>
 
@@ -156,12 +156,12 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
           What to start
         </Typography>
         <RadioGroup value={o.demo ? 'demo' : 'only'} onChange={(e) => set({ demo: e.target.value === 'demo' })}>
-          <FormControlLabel value="only" control={<Radio />} label="OpenArch only (REST API)" />
+          <FormControlLabel value="only" control={<Radio />} label="Hyland OpenArch only (REST API)" />
           <FormControlLabel
             value="demo"
             control={<Radio />}
             disabled={o.defaultUsers}
-            label="OpenArch + demo: three users and sample documents that show permission-aware search"
+            label="Hyland OpenArch + demo: three users and sample documents that show permission-aware search"
           />
         </RadioGroup>
       </Box>
@@ -218,10 +218,10 @@ export function Setup({ cli, onStarted }: { cli: Cli; onStarted: (error?: unknow
                   onChange={(e) => set({ defaultUsers: e.target.checked })}
                 />
               }
-              label="Use the users bundled in the OpenArch image (admin:password and others). Not with the demo."
+              label="Use the users bundled in the Hyland OpenArch image (admin:password and others). Not with the demo."
             />
             <Typography variant="body2" color="text.secondary">
-              These options apply when OpenArch starts the first time. To change them later, remove everything and start
+              These options apply when Hyland OpenArch starts the first time. To change them later, remove everything and start
               again. Only the version can change later.
             </Typography>
           </Stack>

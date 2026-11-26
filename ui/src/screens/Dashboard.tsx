@@ -83,7 +83,7 @@ export function Dashboard(props: {
         folder = (await cli.change<Backup>('Back up the data', ['backup'])).path;
       }
       await cli.change(`Change to ${version}`, ['upgrade', '--version', version]);
-      desktop.toast(`OpenArch ${version} is running.`);
+      desktop.toast(`Hyland OpenArch ${version} is running.`);
     } catch (e) {
       setError(e);
       if (from) {
@@ -106,7 +106,7 @@ export function Dashboard(props: {
         await cli.change('Restore the backup', ['restore', goBack.folder, '--yes']);
       }
       setGoBack(null);
-      desktop.toast(`OpenArch ${goBack.version} is running again.`);
+      desktop.toast(`Hyland OpenArch ${goBack.version} is running again.`);
     } catch (e) {
       setError(e);
     }
@@ -128,13 +128,13 @@ export function Dashboard(props: {
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Typography variant="h6">OpenArch {s?.version}</Typography>
+        <Typography variant="h6">Hyland OpenArch {s?.version}</Typography>
         <Chip label={status.state} color={stateColor[status.state]} />
         {busy && <Typography variant="body2">{busy}...</Typography>}
       </Stack>
       {status.state === 'starting' && (
         <Alert severity="info">
-          OpenArch is starting. The first start pulls about 2 GB and can take a few minutes. This page updates itself.
+          Hyland OpenArch is starting. The first start pulls about 2 GB and can take a few minutes. This page updates itself.
         </Alert>
       )}
       <ErrorAlert error={error} />
@@ -148,7 +148,7 @@ export function Dashboard(props: {
           }
         >
           The version change failed.{' '}
-          {goBack.folder ? `A backup made before it is in ${goBack.folder}.` : 'There is no backup: OpenArch was not running.'}
+          {goBack.folder ? `A backup made before it is in ${goBack.folder}.` : 'There is no backup: Hyland OpenArch was not running.'}
         </Alert>
       )}
 
@@ -208,11 +208,11 @@ export function Dashboard(props: {
 
       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
         {status.state === 'stopped' ? (
-          <Button variant="contained" disabled={!!busy} onClick={() => void act('Start OpenArch', ['up', '--wait=false'])}>
+          <Button variant="contained" disabled={!!busy} onClick={() => void act('Start Hyland OpenArch', ['up', '--wait=false'])}>
             Start
           </Button>
         ) : (
-          <Button variant="contained" disabled={!!busy} onClick={() => void act('Stop OpenArch', ['down'])}>
+          <Button variant="contained" disabled={!!busy} onClick={() => void act('Stop Hyland OpenArch', ['down'])}>
             Stop
           </Button>
         )}
@@ -244,7 +244,7 @@ export function Dashboard(props: {
       <Dialog open={removeOpen} onClose={() => setRemoveOpen(false)}>
         <DialogTitle>Remove everything?</DialogTitle>
         <DialogContent>
-          This stops OpenArch and deletes its containers, its data and the workspace files. The demo users and documents are
+          This stops Hyland OpenArch and deletes its containers, its data and the workspace files. The demo users and documents are
           deleted too.
         </DialogContent>
         <DialogActions>
@@ -268,7 +268,7 @@ function VersionDialog(props: { open: boolean; current: string; onClose: () => v
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
           <Typography variant="body2">
-            Now: {props.current}. The extension makes a backup first, then pulls the new image, restarts OpenArch and runs a
+            Now: {props.current}. The extension makes a backup first, then pulls the new image, restarts Hyland OpenArch and runs a
             smoke test. A version that is not tested can fail: the backup lets you go back.
           </Typography>
           <TextField select label="Version" value={choice} onChange={(e) => setChoice(e.target.value as 'latest' | 'custom')}>

@@ -161,7 +161,7 @@ export function TryIt({ cli, creds, busy }: { cli: Cli; creds: Credentials; busy
   return (
     <Stack spacing={3}>
       <Typography>
-        OpenArch answers each query with the documents that the caller may read. Here the same query runs as the admin and as
+        Hyland OpenArch answers each query with the documents that the caller may read. Here the same query runs as the admin and as
         the demo users. alice is in the group demo-hr, bob is in demo-finance, and carol is in no extra group. A question
         finds the documents nearest in meaning, with vectors made by a local model on Docker Model Runner, and follows the
         same access rules.

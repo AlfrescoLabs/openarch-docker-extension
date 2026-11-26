@@ -129,7 +129,7 @@ export function App() {
             />
           )}
           {current === 'Try it' && creds && status.state === 'healthy' && <TryIt cli={cli} creds={creds} busy={busy} />}
-          {current === 'Try it' && status.state !== 'healthy' && <Alert severity="info">Start OpenArch first.</Alert>}
+          {current === 'Try it' && status.state !== 'healthy' && <Alert severity="info">Start Hyland OpenArch first.</Alert>}
           {current === 'Connect AI' && <ConnectAI workspace={status.workspace} />}
         </>
       )}
