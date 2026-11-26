@@ -1,6 +1,6 @@
 IMAGE       ?= angelborroy/openarch-extension
 TAG         ?= dev
-CLI_VERSION ?= 0.10.0
+CLI_VERSION ?= 0.13.0
 CLI_SRC     ?= ../openarch-cli
 PLATFORMS   ?= linux/amd64,linux/arm64
 
